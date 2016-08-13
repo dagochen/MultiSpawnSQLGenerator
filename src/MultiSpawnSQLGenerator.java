@@ -16,7 +16,7 @@ public class MultiSpawnSQLGenerator {
 		String INSERTPT = "INSERT INTO `pool_template` (`entry`, `max_limit`, `description`)VALUES('";
 		String sourceFile = "./files/fishing.csv";
 		String targetFile = "./files/fishing_pool.sql";
-		Map<String, List<GameObject>> eingeleseneGOs = new HashMap<>();
+		Map<String, List<GameObject>> myGameObjects = new HashMap<>();
 		BufferedReader reader = null;
 		FileWriter writer = null;
 		
@@ -39,21 +39,21 @@ public class MultiSpawnSQLGenerator {
 
 				GameObject g = new GameObject(name, guid, id, map, x, y, z);
 
-				if (eingeleseneGOs.containsKey(g.getPosition().getString())) {
-					List<GameObject> vorhandenListe = eingeleseneGOs.get(g.getPosition().getString());
-					vorhandenListe.add(g);
+				if (myGameObjects.containsKey(g.getPosition().getString())) {
+					List<GameObject> existingSubList = myGameObjects.get(g.getPosition().getString());
+					existingSubList.add(g);
 				} 
 				else 
 				{
-					List<GameObject> neueListe = new ArrayList<>();
-					neueListe.add(g);
-					eingeleseneGOs.put(g.getPosition().getString(), neueListe);
+					List<GameObject> newSubList = new ArrayList<>();
+					newSubList.add(g);
+					myGameObjects.put(g.getPosition().getString(), newSubList);
 				}
 			}
 			reader.close();
 
-			for (String posi : eingeleseneGOs.keySet()) {
-				List<GameObject> goList = eingeleseneGOs.get(posi);
+			for (String posi : myGameObjects.keySet()) {
+				List<GameObject> goList = myGameObjects.get(posi);
 				// dont pool if only one go is at that position
 				if (goList.size() == 1) {
 					continue;
